@@ -1,0 +1,35 @@
+package com.http.ImplementProtocalBySocket;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.IOException;
+
+public class ProtocolUtil {
+
+	public static Request readRequest(InputStream input) throws IOException {
+		// read encode
+		byte[] encodeBytes = new byte[1];
+		input.read(encodeBytes);
+		byte encode = encodeBytes[0];
+
+		// read command length
+		byte[] commandLengthBytes = new byte[4];
+		
+
+		
+		return null;
+	}
+	
+
+	public static Response readResponse(InputStream input) {
+		return null;
+	}
+
+	public static void writeResponse(OutputStream output, Response response) {
+		
+	}
+
+	public static void writeRequest(OutputStream output, Request request) {
+		
+	}
+}

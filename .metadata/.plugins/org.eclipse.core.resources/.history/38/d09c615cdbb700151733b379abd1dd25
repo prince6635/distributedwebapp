@@ -1,0 +1,12 @@
+package com.http.ImplementProtocalBySocket;
+
+import java.io.InputStream;
+
+public class ProtocolUtil {
+
+	public static Request readRequest(InputStream input) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

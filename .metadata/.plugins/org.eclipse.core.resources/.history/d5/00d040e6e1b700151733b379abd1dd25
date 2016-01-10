@@ -1,0 +1,10 @@
+package com.http.ImplementProtocalBySocket;
+
+public class ByteUtil {
+
+	public static int bytes2Int(byte[] commandLengthBytes) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

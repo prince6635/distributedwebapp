@@ -1,0 +1,16 @@
+package com.http.ImplementProtocalBySocket;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+
+public class ProtocolUtil {
+
+	public static Request readRequest(InputStream input) {
+		return null;
+	}
+
+	public static void writeResponse(OutputStream output, Response response) {
+		
+	}
+
+}

@@ -1,0 +1,14 @@
+package com.http.ImplementProtocalBySocket;
+
+// Protocol request data class
+public class Request {
+	private byte encode; 
+	private String command;
+	private int commandLength;
+	public byte getEncode() {
+		return encode;
+	}
+	public void setEncode(byte encode) {
+		this.encode = encode;
+	}
+}

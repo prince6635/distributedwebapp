@@ -1,0 +1,5 @@
+package com.http.ImplementProtocalBySocket;
+
+public enum Encode {
+
+}

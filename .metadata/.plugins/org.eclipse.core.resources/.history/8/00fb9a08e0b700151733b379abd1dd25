@@ -1,0 +1,19 @@
+package com.http.ImplementProtocalBySocket;
+
+import java.io.IOException;
+import java.net.UnknownHostException;
+
+// Client side
+public class Client {
+
+	public static void main(String[] args) throws UnknownHostException, IOException {
+		// Request
+		Request request = new Request();
+		request.setCommand("Hello");
+		request.setCommandLength(request.getCommand().length());
+		request.setEncode(Encode.UTF8.getValue());
+		
+		System.out.println());
+	}
+
+}

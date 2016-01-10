@@ -1,0 +1,10 @@
+package com.http.ImplementProtocalBySocket;
+
+// Client side
+public class Client  {
+
+	public static void main(String[] args) {
+
+	}
+
+}

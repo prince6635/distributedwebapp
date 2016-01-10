@@ -1,0 +1,6 @@
+package com.http.ImplementProtocalBySocket;
+
+// Protocol request data class
+public class Request {
+
+}

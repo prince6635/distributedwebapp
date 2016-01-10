@@ -1,0 +1,12 @@
+package com.http.ImplementProtocalBySocket;
+
+import java.io.IOException;
+
+// Client side
+public class Client {
+
+	public static void main(String[] args) throws UnkownHostException, IOException {
+
+	}
+
+}

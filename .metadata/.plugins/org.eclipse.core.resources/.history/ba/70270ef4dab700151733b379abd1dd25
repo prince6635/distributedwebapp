@@ -1,0 +1,6 @@
+package com.http.ImplementProtocalBySocket;
+
+// Protocal request data
+public class Request {
+
+}

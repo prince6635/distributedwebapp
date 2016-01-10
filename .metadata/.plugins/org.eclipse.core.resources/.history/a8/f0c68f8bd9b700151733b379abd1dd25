@@ -1,0 +1,19 @@
+package com.http.ImplementProtocalBySocket;
+
+import java.net.ServerSocket;
+import java.net.Socket;
+
+// Server side
+public class Server {
+
+	public static void main(String[] args) throws IOException {
+			ServerSocket server = new ServerSocket(6666);
+			
+			while(true){
+				Socket client = server.accept();
+				
+				// 
+			}
+	}
+
+}

@@ -1,0 +1,6 @@
+1452458742326	Encapsulate field 'encode'
+1452458783027	Encapsulate field 'command'
+1452458808584	Encapsulate field 'commandLength'
+1452459101649	Encapsulate field 'encode'
+1452459114018	Encapsulate field 'responseLength'
+1452459117987	Encapsulate field 'response'
