@@ -2,5 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="/Users/ziwang/Documents/Projects/Java/githubprojects/distributedwebapp/01_SerializationMethods/lib/hessian-4.0.7.jar"/>
+	<classpathentry kind="lib" path="/Users/ziwang/Documents/Projects/Java/githubprojects/distributedwebapp/01_SerializationMethods/lib/jackson-all-1.7.6.jar"/>
+	<classpathentry kind="lib" path="/Users/ziwang/Documents/Projects/Java/githubprojects/distributedwebapp/01_SerializationMethods/lib/xstream-1.4.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
