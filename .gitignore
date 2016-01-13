@@ -5,6 +5,7 @@
 .metadata
 RemoteSystemsTempFiles
 .recommenders
+.idea
 
 # Package Files #
 *.jar
