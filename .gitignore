@@ -6,6 +6,7 @@
 RemoteSystemsTempFiles
 .recommenders
 .idea
+*.iml
 
 # Package Files #
 *.jar
