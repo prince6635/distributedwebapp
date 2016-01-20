@@ -24,9 +24,9 @@ Source code: <https://github.com/prince6635/distributedwebapp>
 			* consumer去服务配置中心查询自己要用的服务
 			* consumer再通过RPC去调用provider的服务
 		* Zookeeper让服务配置更简单，hadoop下的子项目，是针对大型分布系统的可靠的协调系统
-		![zoopkeeper1](Images/zookeeper1.jpg =800x)
+		![zoopkeeper1](Images/zookeeper1.jpg)
 		=> 借助Zookeeper实现负载均衡：
-		![zoopkeeper2](Images/zookeeper2.jpg =500x)
+		![zoopkeeper2](Images/zookeeper2.jpg)
 		* 负载均衡算法：
 			* 轮询－Round Robin
 			* 随即－Random
@@ -83,6 +83,32 @@ Source code: <https://github.com/prince6635/distributedwebapp>
 		* AES: 被广泛应用的对称加密算法，128,192,256位
 	* 非对称加密(asymmetrical encryption):主要用来验证请求发送和接收方两者的身份信息!!!
 	需要两个密钥,一个称为公开密钥(public key), 即公钥,另一个称为私有密钥(private key),即私钥。公钥与私钥需要配对使用,因为加密和解密使用的是两个不同的密钥,所以这种算法称为 非对称加密算法。 非对称加密算法实现机密信息交换的基本过程是:甲方生成一对密钥并将其中的一把作为公钥 向其它人公开,得到该公钥的乙方使用该密钥对机密信息进行加密后再发送给甲方,甲方再使用自己保存的另一把专用密钥,即私钥,对加密后的信息进行解密。
-		* RSA, ![RSA](Images/RSA_algorithm.jpg = 500x)
+		* RSA, ![RSA](Images/RSA_algorithm.jpg)
 	* Examples:
 		* 03_EncryptionAlgorithms
+* SOA安全认证
+	* 数字签名：对非对称加密技术与数字摘要技术的综合运用,指的是将通信内容的摘要信息使用
+发送者的私钥进行加密,然后将密文与原文一起传输给信息的接收者,接收者通过发送者的公
+钥解密被加密的摘要信息,然后使用与发送者相同的摘要算法,对接收到的内容采用相同的方
+式产生摘要串,与解密的摘要串进行对比,如果相同,则说明接收到的内容是完整的,在传输
+过程中没有受到第三方篡改,否则则说明通信内容已被第三方修改。
+发送者加密和接受者验证的过程：![Digital Signature](Images/DigitalSignature.jpg)
+	* 数字证书(Digital Certificate): 但需要考虑性能上的成本和需要申请CA证书
+		* 验证过程：![Digital Certificate](Images/DigitalCertificate.jpg)
+		* 证书管理：
+			* Keytool
+			* OpenSSL
+		* 为什么需要认证：![Why Digital Certificate](Images/WhyDigitalCertificate.jpg)
+	* 摘要认证：Digest Authentication
+		* 对于非敏感数据更多的关注其真实性和准确性,因此,主要是在通信过程中保障数据不被篡改。
+		* 但由于服务端与客户端采用 的是相同的secret,一旦secret泄露,通信的安全则无法保障。
+	* 签名认证：Signature Authentication
+		* 结合参数的排序和私钥，![Signature Authentication in Server](Images/SignatureAuthentication_Server.jpg)
+		![Signature Authentication in Client](Images/SignatureAuthentication_Client.jpg)
+	* Examples:
+		* 04_DigitalCertificate
+		* 04_DigestAndSignatureAuthentication
+* HTTPS: ![HTTPS Protocol](Images/HTTPSProtocol.jpg)
+SSL协议数据传输是通过对称加密算法来实现加密的,密钥为双方约定好的加密密钥。
+* OAuth: ![OAuth Protocol](Images/OAuthProtocol.jpg)
+	* 平台厂商：比如facebook，微信，微博，淘宝；第三方应用：比如豆瓣，知乎；当用户在豆瓣上发表文章后想获得微信的授权转载到朋友圈，这时候微信就可以提供一个基于OAuth和SOA的授权API让豆瓣来获得用户的授权，而且不需要让用户在豆瓣提供自己微信的用户名和密码就可以访问用户微信的data；
