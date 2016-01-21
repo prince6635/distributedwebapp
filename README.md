@@ -112,3 +112,36 @@ Source code: <https://github.com/prince6635/distributedwebapp>
 SSL协议数据传输是通过对称加密算法来实现加密的,密钥为双方约定好的加密密钥。
 * OAuth: ![OAuth Protocol](Images/OAuthProtocol.jpg)
 	* 平台厂商：比如facebook，微信，微博，淘宝；第三方应用：比如豆瓣，知乎；当用户在豆瓣上发表文章后想获得微信的授权转载到朋友圈，这时候微信就可以提供一个基于OAuth和SOA的授权API让豆瓣来获得用户的授权，而且不需要让用户在豆瓣提供自己微信的用户名和密码就可以访问用户微信的data；
+
+### 分布式系统
+* 分布式缓存: ![Distributed Cache](Images/DistributedCache.jpg)
+	* memcache: 就是一张巨大的hash table，用LRU算法淘汰过多的数据
+		* 分布式memcache: ![memcache](Images/memcache.jpg)
+		* 防止memcache的“雪崩效应” -> 一致性哈希算法: ![Consistent Hash](Images/ConsistentHash.jpg), 比如把2^32分成4份，每份2^8，则对0到2^8-1到所有请求都落在node1上，依次类推。
+* 分布式session: 传统的应用服务器,如tomcat、jboss等等,其自身所实现的session管理大部分都是基于单机的,对于大型分布式网站来说,支撑其业务的远远不止是一台服务器,而是一个分布式集 群,请求在不同服务器之间跳转,需要保持服务器之间的session同步。传统网站一般通过将 一部分数据存储在cookie中,来规避分布式环境下session的操作,这样做弊端很多,一方面 cookie的安全性一直广为诟病,并且,cookie存储数据的大小是有限制的,随着移动互联网 的发展,很多情况下还得兼顾移动端的session需求,使得采用cookie来进行session同步的方式弊端更为凸显。分布式session正是在这种情况下应运而生的。![Distributed Session](Images/DistributedSession.jpg)
+	* 业务强依赖缓存,缓存需做到容灾:
+		1. 双机房互相备份
+		2. 数据复制多份,单台缓存失效,集群间能够自动复制和备份
+		3. 数据库留有余量
+		4. 万兆网卡
+* 持久化存储 (RDBMS & NoSQL):
+	* MySQL
+		* 业务拆分: ![mysql1](Images/mysql1.jpg)
+		* 数据复制: ![mysql2](Images/mysql2.jpg)
+		* 读写分离: ![mysql3](Images/mysql3.jpg)
+		* dual-master架构: ![mysql4](Images/mysql4.jpg)
+		stand by master也要跟master的data保持一致。MySQL会通过binary log纪录当前copy的server id来避免循环copy。
+			* 如果需要对当前master维护，则首先停止写入，变成只读，修改配置文件以防重启后失效，然后等待stand by master把当前master的所有data同步后就开启stand by master的write。
+			* 如果当前master突然宕机，此时stand by master宕data不一定以及同步了，就要copy当前master上的binary log，然后对比stand by master的log，知道data同步后才开启write。
+		* 分库分表 ![mysql5](Images/mysql5.jpg)
+		假设将原来的单库单表order拆分成256个库,每个库包含1024个表,那么,按照前面所提到的路由策略,对于userid=262145的访问, 路由的计算过程如下:
+		```
+		中间变量=262145%(256*1024)=1
+		库=取整(1/1024)=0
+		表=1%1024=1 这意味着,对于userid=262145的订单记录的查询和修改,将被路由到第0个库的第1个表中执行。
+		```
+		* 分库分表带来的限制
+			1. 条件查询、分页查询受到限制,查询必须带上分库分表所带上的id
+			2. 事务可能跨多个库,数据一致性无法通过本地事务实现,无法使用外键
+			3. 分库分表规则确定以后,扩展变更规则需要迁移数据 - 相当于给一个高速上行驶的汽车换轮胎
+		* Examples: None
