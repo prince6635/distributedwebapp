@@ -1,0 +1,6 @@
+remote_add request_time_usec request_method host_request_uri http_referer status body_bytes_sent
+124.119.202.29 455 GET www.xxx.com/list.html www.qq.com	404 432004
+126.119.202.29 235 POST www.xxx.com/list.html www.qq.com 302 1432004
+124.129.202.29 155 GET www.xxx.com/details.html www.qq.com 500 132004
+125.119.202.29 855 GET www.xxx.com/list.html www.qq.com	404 4004
+124.119.212.39 995 POST www.xxx.com/index.html www.qq.com 404 532004

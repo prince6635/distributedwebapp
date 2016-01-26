@@ -240,3 +240,75 @@ SSL协议数据传输是通过对称加密算法来实现加密的,密钥为双�
 	![lucene_solr](Images/lucene_solr.jpg)
 	* Examples:
 		* 07_Lucene, 目前在维护的开源中文分词有IKAAnalyzer
+* 分布式系统稳定性
+	* 日志分析：当发生故障系统不可用时,相关的开发人员也应该第一时间获得消息,进行修复。
+		* cat: 查看较小文件的内容，但不要打开一个过大的文件，可能会占用过多的系统资源,从而影响系统对外的服务。
+			* $ echo abc > aa.log
+			* $ cat aa.log
+		* more: 分页显示文件
+			* cat的缺点在于,一旦执行后,便无法再进行交互和控制,而more命令可以分页的展现文件内容,按enter键显示文件下一行,按空格键便显示下一页,按f键显示下一屏内容,按b键显示上一屏内容。
+			* !!!另一个命令less提供比more更加丰富的功能,支持内容查找,并且能够高亮显示。(用/查找时会把所有结果highlight起来)
+		* tail: 显示文件尾，使用tail命令能够查看到文件最后几行,这对于日志文件非常有效,因为日志文件常常是追加写入的,新写入的内容处于文件的末尾位置。
+			* $ tail -n20 -f error.log, 其中-n20是最后的20行，-f是保证该文件一直打开，如果此时有追加信息会马上看到。
+		* head: 显示文件头
+		* sort: 内容排序
+			* sort＋文件名，默认是按字符排序，加上-n就是按数字排序，-r是倒序排列。
+			* $ sort -k 2 -t ' ' -n error.log, 表示按第2列，且‘ ’是分隔符排序
+		* wc: 字符统计
+			* $ wc -l error.log, 行数；换成－c是字节数；－L是最长的行；－w是单词数
+		* uniq:
+			* 查看重复出现的行uniq命令可以用来显示文件中行重复的次数,或者显示仅出现一次的行,以及仅仅显示重复出现的行,并且,uniq的去重针对的只是连续的两行,因此它常常与sort结合起来使用。
+			![linux_cmd](Images/linux_cmd.jpg)
+			结果是：aaa bbb ccc，其中｜表示管道，之前命令sort的输出会变成下一个命令uniq的输入。最后加上-c会统计出每个纪录出现的次数；加上-u只显示出现一次的行；加上-d只显示出现多于1次点行；
+			* $ sort test_error.log | uniq -c | sort -k 1 -t ' '
+		* grep: 查找；$ grep 'aaa' test_error.log,列出所有包含aaa的行；grep 'a' -c test_error.log，列出包含aaa的行数。
+		* curl: URL访问工具，要想在命令行下通过HTTP协议访问网页文档,就不得不用到一个工具,这便是curl,它支持HTTP,HTTPS,FTP,FTPS,Telnet等多种协议,常被用来在命令行下抓取网页和监控WEB服务器状态。
+			* -I, 只看head，一般会在head里面加个特殊的field比如status，然后写个脚本用curl HEAD检查网站情况，有异常就促发报警。
+		* 查看请求访问量: 对于在线运行的系统来说,常常会碰到各种不怀好意的恶意攻击行为,其中比较常见的便是HTTP flood,也称为CC攻击。如何能够快速的定位到攻击,并迅速响应,便成为开发运维人员必备的技能。定位问题最快捷的办法,便是登录到相应的应用,查看访问日志,找到相应的攻击来源。
+			* 访问量排名 前10的ip地址: cat access.log | cut -f1 -d " " | sort | uniq -c | sort -k 1 -n -r | head -10
+			* 页面访问量排名前10的url: cat access.log | cut –f4 -d " " | sort | uniq -c | sort -k 1 -n -r | head -10
+		* 查看最耗时的页面: cat access.log | sort -k 2 -n -r | head -10
+		* 统计404页面占比(export用来定义变量): export total_line=`wc -l access.log | cut -f1 -d " "` && export not_found_line=`awk '$6=='404'{print $6}' access.log | wc -l` && expr $not_found_line \* 100 / $total_line
+		* sed编辑器
+		* awk程序
+		* 终极武器—shell脚本, 脚本能够更加方便的使用外部工具和命令,将内容输出到各个通道甚至是数据库,处理和调度各种复杂的任务等等。举个例子来说,线上环境常常需要编写一些脚本,来查看系统运行的情况,并且定期执行,一旦系统出现异常,便打印出错误消息,监控系统通过捕捉错误消息,发出报警,下面一个脚本将能够查看系统的load和磁盘占用,在load超过2或者磁盘利用超过85%的情况下报警:
+		```
+		#!/bin/bash
+		load=`top -n 1 | sed -n '1p' | awk '{print $11}'`
+		load=${load%\,*}
+		disk_usage=`df -h | sed -n '2p' | awk '{print $(NF - 1)}'`
+		disk_usage=${disk_usage%\%*}
+		overhead=`expr $load \> 2.00`
+		if [ $overhead -eq 1 ];then
+			echo "system load is overhead"
+		fi
+		if [ $disk_usage -gt 85 ];then
+		  echo "disk is nearly full, need more disk space"
+		fi
+		exit 0
+		```
+	* 集群监控指标
+		* load: 系统的load被定义为特定时间间隔内运行队列中的平均线程数。top / uptime
+		* CPU利用率: top | grep Cpu
+		* 磁盘剩余空间: df -h
+		* 网络traffic: sar –n DEV 1 1
+		* 磁盘IO: iostat -d -k
+		* 内存使用: free -m
+		* qps: 是query per second的缩写,即每秒查询数,qps很大程度上代表了系 统在业务上的繁忙程度,而每次请求的背后,可能对应着多次磁盘I/O,多次网络请求,以及多个CPU时间片。
+		* rt: 是response time的缩写,即请求的响应时间。响应时间是一个非常关键的指标,直接关系到前端的用户体验。通过apache或者nginx的访问日志,便能够得知每个请求的响应时间。以nginx为例,访问日志的输出格式中,增加$request_time的输出,便能够获得响应时间。
+		* java的GC(《深入理解JVM》):
+			* GC工作直接会导致应用stop。到Old会导致full GC，应用停顿时间更长；
+			![java_GC](Images/java_GC.jpg)
+			* CMS收集器是一款以获取最短回收停顿时间为目的的收集器,它是基于标记-清除算法实现的。
+		* 数据收集-监控分布式系统的运行状态，前提是所有内容都是通过日志输出的(linux的inotify可以在文件被修改时对外发push事件，故可以把修改内容发送到消息系统，然后再投递到下一个时时计算系统，然后运算和统计后的结果就被db存起来，最后可以用来做实时或离线分析)：
+		![data_collect](Images/data_collect.jpg)
+	* 心跳检测
+	* 容量与水位
+	* 流控
+	* Examples:
+		* 09_ShellScripts
+* 高并发系统设计
+* 寻找性能瓶颈与性能优化
+* Java程序的性能优化与故障排查
+	* 
+* 大型网站的数据分析
